@@ -58,10 +58,8 @@
         dest: "{{ item.path }}.bak"
       with_items: "{{ found_vlan_configs.files }}" 
     - name: Fix vlan configuration 
-      lineinfile:
+      replace:
         path: "{{ item.path }}"
-        regex: '^PHYSDEV=eth1'
-        line: PHYSDEV=em1
+        regexp: '^PHYSDEV=eth'
+        replace: PHYSDEV=em
       with_items: "{{ found_vlan_configs.files }}" 
-      
-      
