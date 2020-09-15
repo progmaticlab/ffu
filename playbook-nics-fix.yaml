@@ -38,10 +38,10 @@
         path: /etc/sysconfig/network-scripts/ifcfg-vhost0
       register: vhost0
     - name: Fix bind interface for vhost0
-      lineinfile:
-        path: /etc/sysconfig/network-scripts/ifcfg-vhost0
-        regex: '^BIND_INT=eth0'
-        line: BIND_INT=em0
+      replace:
+        path: ifcfg-vhost0
+        regexp: '^BIND_INT=eth'
+        replace: BIND_INT=em
       when: vhost0.stat.exists == True
 
     - name: Find vlan configs
