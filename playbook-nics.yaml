@@ -1,0 +1,49 @@
+---
+- name: Rename eth devices
+  hosts: all
+  become: yes
+  vars:
+    prefix: "em"
+  tasks:
+    - name: Update udev rules
+      lineinfile:
+        line: "SUBSYSTEM==\"net\", ACTION==\"add\", DRIVERS==\"?*\", ATTR{address}==\"{{ ansible_facts[item]['perm_macaddress'] | default(ansible_facts[item]['macaddress']) }}\", NAME=\"{{ prefix }}{{ item|replace('eth','') }}\""
+        path: /etc/udev/rules.d/70-rhosp-persistent-net.rules
+        create: True
+      with_items: "{{ ansible_interfaces }}"
+      when: item.startswith("eth")
+    - name: Copy network-script files using the new prefix
+      copy:
+        remote_src: True
+        src: /etc/sysconfig/network-scripts/ifcfg-{{ item }}
+        dest: /etc/sysconfig/network-scripts/ifcfg-{{ prefix }}{{ item|replace('eth','') }}
+      with_items: "{{ ansible_interfaces }}"
+      when: item.startswith("eth")
+    - name: Edit NAME in new network-script files
+      lineinfile:
+        regexp: "^NAME=.*"
+        line: "NAME={{ prefix }}{{ item|replace('eth','') }}"
+        path: /etc/sysconfig/network-scripts/ifcfg-{{ prefix }}{{ item|replace('eth','') }}
+      with_items: "{{ ansible_interfaces }}"
+      when: item.startswith("eth")
+    - name: Edit DEVICE in new network-script files
+      lineinfile:
+        regexp: "^DEVICE=.*"
+        line: "DEVICE={{ prefix }}{{ item|replace('eth','') }}"
+        path: /etc/sysconfig/network-scripts/ifcfg-{{ prefix }}{{ item|replace('eth','') }}
+      with_items: "{{ ansible_interfaces }}"
+      when: item.startswith("eth")
+    - name: Backup old eth network-script files
+      copy:
+        remote_src: True
+        src: /etc/sysconfig/network-scripts/ifcfg-{{ item }}
+        dest: /etc/sysconfig/network-scripts/ifcfg-{{ item }}.bak
+      with_items: "{{ ansible_interfaces }}"
+      when: item.startswith("eth")
+    - name: Backup old eth network-script files
+      file:
+        path: /etc/sysconfig/network-scripts/ifcfg-{{ item }}
+        state: absent
+      with_items: "{{ ansible_interfaces }}"
+      when: item.startswith("eth")
+

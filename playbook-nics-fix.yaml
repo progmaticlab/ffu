@@ -1,0 +1,46 @@
+---
+- name: Rename eth devices
+  hosts: all
+  become: yes
+  vars:
+    prefix: "em"
+  tasks:
+    - name: heck if route-eth* file exists
+      stat:
+        path: /etc/sysconfig/network-scripts/route-eth0
+      register: routefile  
+    - name: Fix routing
+      block: 
+        
+      - name: Copy network-script file using the new prefix (route)
+        copy:
+          remote_src: True
+          src: /etc/sysconfig/network-scripts/route-eth0
+          dest: /etc/sysconfig/network-scripts/route-{{ prefix }}0
+      - name: Edit NIC in new network-script route file
+        replace:
+          regexp: "eth"
+          path: /etc/sysconfig/network-scripts/route-{{ prefix }}0
+          replace: "{{ prefix }}"
+      - name: Backup old eth network-script route files 
+        copy:
+          remote_src: True
+          src: /etc/sysconfig/network-scripts/route-eth0
+          dest: /etc/sysconfig/network-scripts/route-eth0.bak
+      - name: Removing old eth network-script route file
+        file:
+          path: /etc/sysconfig/network-scripts/route-eth0
+          state: absent
+      when: routefile.stat.exists == True
+
+    - name: Check if ifcfg-vhost0 file exists
+      stat:
+        path: /etc/sysconfig/network-scripts/ifcfg-vhost0
+      register: vhost0
+    - name: Fix bind interface for vhost0
+      lineinfile:
+        path: /etc/sysconfig/network-scripts/ifcfg-vhost0
+        regex: '^BIND_INT=eth0'
+        line: BIND_INT=em0
+      when: vhost0.stat.exists == True
+      

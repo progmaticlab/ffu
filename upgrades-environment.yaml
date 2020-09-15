@@ -1,0 +1,7 @@
+parameter_defaults:
+  UpgradeInitCommand: |
+    sudo dnf module disable -y container-tools:rhel8
+    sudo dnf module enable -y container-tools:2.0
+  UpgradeLeappCommandOptions: "--enablerepo rhel-8-for-x86_64-baseos-eus-rpms --enablerepo rhel-8-for-x86_64-appstream-eus-rpms --enablerepo fast-datapath-for-rhel-8-x86_64-rpms"
+  CephAnsibleRepo: rhceph-4-tools-for-rhel-8-x86_64-rpms
+
