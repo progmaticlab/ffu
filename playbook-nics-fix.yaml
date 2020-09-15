@@ -43,4 +43,25 @@
         regex: '^BIND_INT=eth0'
         line: BIND_INT=em0
       when: vhost0.stat.exists == True
+
+    - name: Find vlan configs
+      find:
+        paths: /etc/sysconfig/network-scripts
+        use_regex: yes
+        patterns: ['^ifcfg-vlan[0-9]+$']
+        contains: 'PHYSDEV=eth[01]'
+      register: found_vlan_configs 
+    - name: Backup vlans configuration
+      copy:
+        remote_src: True
+        src: "{{ item.path }}"
+        dest: "{{ item.path }}.bak"
+      with_items: "{{ found_vlan_configs.files }}" 
+    - name: Fix vlan configuration 
+      lineinfile:
+        path: "{{ item.path }}"
+        regex: '^PHYSDEV=eth1'
+        line: PHYSDEV=em1
+      with_items: "{{ found_vlan_configs.files }}" 
+      
       
