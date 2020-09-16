@@ -11,7 +11,7 @@ source stackrc
 
 #For nightly lab
 #tripleo-ansible-inventory --ansible_ssh_user stack -static-yaml-inventory ~/inventory.yaml
-tripleo-ansible-inventory -static-yaml-inventory ~/inventory.yaml
+tripleo-ansible-inventory --static-yaml-inventory ~/inventory.yaml
 
 ansible-playbook -i ~/inventory.yaml $my_dir/playbook-leapp-data.yaml
 ansible-playbook -i ~/inventory.yaml $my_dir/playbook-nics.yaml
