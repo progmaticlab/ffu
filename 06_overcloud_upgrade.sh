@@ -1,5 +1,8 @@
 #!/bin/bash -eux
 
+my_file="$(readlink -e "$0")"
+my_dir="$(dirname "$my_file")"
+
 cd ~
 source stackrc
 
