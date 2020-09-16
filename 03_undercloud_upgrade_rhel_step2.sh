@@ -12,5 +12,7 @@ sudo subscription-manager repos --enable=rhel-8-for-x86_64-baseos-eus-rpms --ena
 sudo dnf module disable -y container-tools:rhel8
 sudo dnf module enable -y container-tools:2.0
 
-sudo dnf distro-sync -y && sudo reboot
+sudo dnf distro-sync -y 
+
+echo "Perform reboot: sudo reboot"
 

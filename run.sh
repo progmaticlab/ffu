@@ -27,7 +27,6 @@ function wait_ssh() {
     ssh_opts+=" -i $ssh_key"
   fi
   local tf=$(mktemp)
-  sleep 30
   while ! scp $ssh_opts -B $tf ${user}@${addr}:/tmp/ ; do
     if (( iter >= max_iter )) ; then
       echo "Could not connect to VM $addr"
@@ -70,6 +69,7 @@ echo Preparing for undercloud RHEL upgrade
 
 run_ssh $IPMI_USER $mgmt_ip $ssh_private_key 'ffu/01_undercloud_prepare.sh'
 echo Rebooting undercloud
+run_ssh $IPMI_USER $mgmt_ip $ssh_private_key 'sudo reboot'
 
 echo Waiting undercloud return after reboot
 wait_ssh $IPMI_USER $mgmt_ip $ssh_private_key
@@ -77,11 +77,12 @@ wait_ssh $IPMI_USER $mgmt_ip $ssh_private_key
 run_ssh $IPMI_USER $mgmt_ip $ssh_private_key 'ffu/02_undercloud_upgrade_rhel_step1.sh'
 
 echo Waiting undercloud return after reboot. It takes long time!
-echo sleep 720
-sleep 720
-wait_ssh $IPMI_USER $mgmt_ip $ssh_private_key
+run_ssh $IPMI_USER $mgmt_ip $ssh_private_key 'sudo reboot'
+wait_ssh $IPMI_USER $mgmt_ip $ssh_private_key 120
 
 run_ssh $IPMI_USER $mgmt_ip $ssh_private_key 'ffu/03_undercloud_upgrade_rhel_step2.sh'
+echo Rebooting undercloud
+run_ssh $IPMI_USER $mgmt_ip $ssh_private_key 'sudo reboot'
 wait_ssh $IPMI_USER $mgmt_ip $ssh_private_key
 
 run_ssh $IPMI_USER $mgmt_ip $ssh_private_key 'ffu/04_undercloud_upgrade_tripleo.sh'
