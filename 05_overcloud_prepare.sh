@@ -16,7 +16,7 @@ tripleo-ansible-inventory --static-yaml-inventory ~/inventory.yaml
 ansible-playbook -i ~/inventory.yaml $my_dir/playbook-leapp-data.yaml
 ansible-playbook -i ~/inventory.yaml $my_dir/playbook-nics.yaml
 ansible-playbook -i ~/inventory.yaml $my_dir/playbook-nics-vlans.yaml
-ansible-playbook overcloud_Compute -i ~/inventory.yaml $my_dir/playbook-nics-vhost0.yaml
+ansible-playbook -i ~/inventory.yaml -l overcloud_Compute $my_dir/playbook-nics-vhost0.yaml
 ansible-playbook -i ~/inventory.yaml $my_dir/playbook-ssh.yaml
 
 
