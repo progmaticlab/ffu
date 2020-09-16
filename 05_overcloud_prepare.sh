@@ -20,7 +20,8 @@ source stackrc; tripleo-ansible-inventory --static-yaml-inventory ~/inventory.ya
 #sed -i 's/ansible_ssh_user: heat-admin/ansible_ssh_user: stack/' ~/inventory.yaml
 ansible-playbook -i ~/inventory.yaml ffu/playbook-leapp-data.yaml
 ansible-playbook -i ~/inventory.yaml ffu/playbook-nics.yaml
-ansible-playbook -i ~/inventory.yaml ffu/playbook-nics-fix.yaml
+ansible-playbook -i ~/inventory.yaml ffu/playbook-nics-vlans.yaml
+ansible-playbook overcloud_Compute -i ~/inventory.yaml ffu/playbook-nics-vhost0.yaml
 ansible-playbook -i ~/inventory.yaml ffu/playbook-ssh.yaml
 
 
