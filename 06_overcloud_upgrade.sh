@@ -12,6 +12,7 @@ fi
 
 rm -rf tripleo-heat-templates
 cp -r /usr/share/openstack-tripleo-heat-templates tripleo-heat-templates
+rm -rf tf-tripleo-heat-templates
 git clone https://review.opencontrail.org/tungstenfabric/tf-tripleo-heat-templates -b stable/train
 cp -r tf-tripleo-heat-templates/* tripleo-heat-templates/
 
