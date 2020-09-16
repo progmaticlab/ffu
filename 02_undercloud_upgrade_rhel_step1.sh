@@ -5,7 +5,7 @@ my_dir="$(dirname "$my_file")"
 
 /sbin/ip addr list
 
-sudo systemctl stop openstack-* httpd haproxy mariadb rabbitmq* docker xinetd
+sudo systemctl stop openstack-* httpd haproxy mariadb rabbitmq* docker xinetd || true
 
 sudo yum -y remove *el7ost* galera* haproxy* \
     httpd mysql* pacemaker* xinetd python-jsonpointer \
