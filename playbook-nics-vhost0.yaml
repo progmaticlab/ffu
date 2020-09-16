@@ -1,0 +1,25 @@
+---
+- name: Patch vhost0 devices if have eth references
+  hosts: all
+  become: yes
+  vars:
+    prefix: "em"
+  tasks:
+    - name: Patch vhost0 device
+      block:
+        - name: Check that vhost0 files exists
+          stat:
+            path: /etc/sysconfig/network-scripts/ifcfg-vhost0
+          register: nic_result
+        - name: Backup old vhost0 network-script files
+          copy:
+            remote_src: True
+            src: "{{ nic_result.stat.path }}"
+            dest: "{{ nic_result.stat.path }}.bak"
+          when: nic_result.stat.exists
+        - name: Edit BIND_INT in new network-script files
+          replace:
+            path: "{{ nic_result.stat.path }}"
+            regexp: "^BIND_INT=eth"
+            replace: "BIND_INT={{ prefix }}"
+          when: nic_result.stat.exists
