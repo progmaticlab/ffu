@@ -1,9 +1,22 @@
-#!/bin/bash 
+#!/bin/bash -eux
 
-set -o xtrace
-
+cd ~
 source stackrc
-./ffu/update_nic_templates.sh
+
+if [ ! -e tripleo-heat-templates.rhosp13 ] ; then
+  mv tripleo-heat-templates tripleo-heat-templates.rhosp13
+  cp -r /usr/share/openstack-tripleo-heat-templates tripleo-heat-templates
+  git clone https://review.opencontrail.org/tungstenfabric/tf-tripleo-heat-templates -b stable/train
+  cp -r tf-tripleo-heat-templates/* tripleo-heat-templates/
+
+  cp $my_dir/upgrades-environment.yaml tripleo-heat-templates/
+  cp $my_dir/workaround.yaml tripleo-heat-templates/
+  #Check if this works
+  name=`sudo hiera container_image_prepare_node_names | sed 's/[]["]//g'`
+  grep DockerInsecureRegistryAddress contrail-parameters.yaml || echo "  DockerInsecureRegistryAddress: $name" >> contrail-parameters.yaml
+
+  $my_dir/update_nic_templates.sh
+fi
 
 openstack overcloud upgrade prepare --templates tripleo-heat-templates/ \
   --stack overcloud --libvirt-type kvm \
@@ -18,4 +31,3 @@ openstack overcloud upgrade prepare --templates tripleo-heat-templates/ \
   -e misc_opts.yaml \
   -e contrail-parameters.yaml \
   -e containers-prepare-parameter.yaml
-
