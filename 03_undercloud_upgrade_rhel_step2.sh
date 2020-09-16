@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -eux
 
 sudo dnf -y remove python2*
 

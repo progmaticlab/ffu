@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -eux
 
 ansible-playbook -c local -i localhost, ffu/playbook-ssh.yaml
 
