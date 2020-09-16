@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+my_file="$(readlink -e "$0")"
+my_dir="$(dirname "$my_file")"
+
 /sbin/ip addr list
 
 sudo systemctl stop openstack-* httpd haproxy mariadb rabbitmq* docker xinetd
@@ -21,7 +24,7 @@ sudo rm -rf /etc/httpd /var/lib/docker
 
 sudo yum install -y leapp
 
-sudo tar -xzf ffu/leapp-data8.tar.gz -C /etc/leapp/files
+sudo tar -xzf $my_dir/leapp-data8.tar.gz -C /etc/leapp/files
 
 sudo subscription-manager refresh
 
