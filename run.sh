@@ -58,9 +58,6 @@ checkForVariable undercloud_public_host
 checkForVariable undercloud_admin_host
 
 cd
-echo Generating yaml files
-cat ffu/rhsm.yaml.template | envsubst > ffu/rhsm.yaml
-cat ffu/containers-prepare-parameter.yaml.template | envsubst > ffu/containers-prepare-parameter.yaml
 
 echo Copiyng ffu/* to undercloud node
 scp -r ~/ffu $IPMI_USER@$mgmt_ip:
