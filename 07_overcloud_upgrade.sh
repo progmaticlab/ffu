@@ -19,9 +19,14 @@ cp -r tf-tripleo-heat-templates/* tripleo-heat-templates/
 
 cp $my_dir/upgrades-environment.yaml tripleo-heat-templates/
 cp $my_dir/workaround.yaml tripleo-heat-templates/
-#Check if this works
-name=$(sudo hiera container_image_prepare_node_names | sed 's/[]["]//g')
-grep DockerInsecureRegistryAddress contrail-parameters.yaml || echo "  DockerInsecureRegistryAddress: ${name}:8787" >> contrail-parameters.yaml
+
+container_node_name=$(sudo hiera container_image_prepare_node_names | sed 's/[]["]//g')
+container_node_ip=$(sudo hiera container_image_prepare_node_ips | sed 's/[]["]//g')
+cat <<EOF >> contrail-parameters.yaml
+  DockerInsecureRegistryAddress:
+    - ${container_node_name}:8787
+    - ${container_node_ip}:8787
+EOF
 
 $my_dir/update_nic_templates.sh
 
@@ -39,7 +44,6 @@ openstack overcloud upgrade prepare \
   --templates tripleo-heat-templates/ \
   --stack overcloud --libvirt-type kvm \
   --roles-file $role_file \
-  -e docker_registry.yaml \
   -e tripleo-heat-templates/environments/rhsm.yaml \
   -e rhsm.yaml \
   -e tripleo-heat-templates/environments/contrail/contrail-services.yaml \
