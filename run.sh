@@ -4,7 +4,7 @@ my_file="$(readlink -e "$0")"
 my_dir="$(dirname "$my_file")"
 
 cd
-source ~/rhosp-environment.sh
+source rhosp-environment.sh
 
 function run_ssh() {
   local user=$1	
@@ -21,7 +21,7 @@ function run_ssh() {
 }
 
 function run_ssh_undercloud() {
-  run_ssh $IPMI_USER $mgmt_ip $ssh_private_key $@
+  run_ssh $SSH_USER $mgmt_ip $ssh_private_key "$@"
 }
 
 function wait_ssh() {
@@ -35,6 +35,7 @@ function wait_ssh() {
     ssh_opts+=" -i $ssh_key"
   fi
   local tf=$(mktemp)
+  sleep 60
   while ! scp $ssh_opts -B $tf ${user}@${addr}:/tmp/ ; do
     if (( iter >= max_iter )) ; then
       echo "Could not connect to VM $addr"
@@ -50,7 +51,7 @@ function wait_ssh() {
 function reboot_and_wait_undercloud() {
   echo "Rebooting undercloud"
   run_ssh_undercloud 'sudo reboot'
-  wait_ssh $IPMI_USER $mgmt_ip $ssh_private_key
+  wait_ssh $SSH_USER $mgmt_ip $ssh_private_key
 }
 
 function checkForVariable() {
@@ -61,7 +62,7 @@ function checkForVariable() {
   fi
 }
 
-checkForVariable IPMI_USER
+checkForVariable SSH_USER
 checkForVariable RHEL_USER
 checkForVariable RHEL_PASSWORD
 checkForVariable RHEL_POOL_ID
@@ -71,7 +72,7 @@ checkForVariable undercloud_public_host
 checkForVariable undercloud_admin_host
 
 echo "Copiyng ffu/* to undercloud node"
-scp -r $my_dir/ffu $IPMI_USER@$mgmt_ip:
+scp -r $my_dir/ffu $SSH_USER@$mgmt_ip:./
 
 echo "Preparing for undercloud RHEL upgrade"
 run_ssh_undercloud './ffu/01_undercloud_prepare.sh'
@@ -91,4 +92,4 @@ run_ssh_undercloud './ffu/05_contrail_images_prepare.sh'
 ######################################################
 
 run_ssh_undercloud './ffu/06_overcloud_prepare.sh'
-run_ssh_undercloud './ffu/07_overcloud_upgrade.sh'
+run_ssh_undercloud "NODE_ADMIN_USERNAME=$SSH_USER  ./ffu/07_overcloud_upgrade.sh"
