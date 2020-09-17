@@ -24,10 +24,19 @@ grep DockerInsecureRegistryAddress contrail-parameters.yaml || echo "  DockerIns
 
 $my_dir/update_nic_templates.sh
 
+role_file="$(pwd)/tripleo-heat-templates/roles_data_contrail_aio.yaml"
+
+./tripleo-heat-templates/tools/process-templates.py --clean \
+  -r $role_file \
+  -p tripleo-heat-templates/
+
+./tripleo-heat-templates/tools/process-templates.py \
+  -r $role_file \
+  -p tripleo-heat-templates/
 
 openstack overcloud upgrade prepare --templates tripleo-heat-templates/ \
   --stack overcloud --libvirt-type kvm \
-  --roles-file tripleo-heat-templates/roles_data_contrail_aio.yaml \
+  --roles-file $role_file \
   -e docker_registry.yaml \
   -e tripleo-heat-templates/environments/rhsm.yaml \
   -e rhsm.yaml \
