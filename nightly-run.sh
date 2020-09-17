@@ -87,12 +87,13 @@ run_ssh $SSH_USER $mgmt_ip $ssh_private_key 'sudo reboot'
 wait_ssh $SSH_USER $mgmt_ip $ssh_private_key
 
 run_ssh $SSH_USER $mgmt_ip $ssh_private_key 'ffu/04_undercloud_upgrade_tripleo.sh'
+run_ssh $IPMI_USER $mgmt_ip $ssh_private_key 'ffu/05_contrail_images_prepare.sh'
 
 #######################################################
 #                   OVERCLOUD                         #
 #######################################################
 
 
-run_ssh $SSH_USER $mgmt_ip $ssh_private_key 'ffu/05_overcloud_prepare.sh'
+run_ssh $SSH_USER $mgmt_ip $ssh_private_key 'ffu/06_overcloud_prepare.sh'
 
-run_ssh $SSH_USER $mgmt_ip $ssh_private_key 'ffu/06_overcloud_upgrade.sh'
+run_ssh $SSH_USER $mgmt_ip $ssh_private_key 'ffu/07_overcloud_upgrade.sh'
