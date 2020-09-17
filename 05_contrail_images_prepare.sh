@@ -1,11 +1,13 @@
 #!/bin/bash -eux
 
+cd ~
+source stackrc
 source ~/rhosp-environment.sh
 
 registry=${CONTAINER_REGISTRY:-'docker.io/tungstenfabric'}
 tag=${CONTRAIL_CONTAINER_TAG:-'latest'}
 
-./contrail-tripleo-heat-templates/tools/contrail/import_contrail_container.sh \
+./tripleo-heat-templates/tools/contrail/import_contrail_container.sh \
     -f ./contrail_containers.yaml -r $registry -t $tag
 
 sed -i ./contrail_containers.yaml -e "s/192.168.24.1/${prov_ip}/"
