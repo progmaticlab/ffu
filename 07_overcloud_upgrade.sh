@@ -87,6 +87,7 @@ for node in $(openstack server list --name overcloud-contrailcontroller -c Name 
 done
 
 for node in $(openstack server list --name overcloud-novacompute -c Name -f value) ; do
+  # TODO: disable 
   openstack overcloud upgrade run --stack overcloud --tags system_upgrade --limit $node
   openstack overcloud upgrade run --stack overcloud --limit $node
 done
@@ -97,7 +98,6 @@ openstack overcloud upgrade converge \
   --templates tripleo-heat-templates/ \
   --stack overcloud --libvirt-type kvm \
   --roles-file $role_file \
-  -e docker_registry.yaml \
   -e tripleo-heat-templates/environments/rhsm.yaml \
   -e rhsm.yaml \
   -e tripleo-heat-templates/environments/contrail/contrail-services.yaml \
