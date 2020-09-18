@@ -9,6 +9,13 @@ source stackrc
 # TODO: ita fails - no python3 on overcloud at this moment
 # openstack tripleo validator run --group pre-upgrade
 
+# Disable PCS fencing
+ctrl_ip=$(openstack server list --name overcloud-controller-0 -c Networks -f value | cut -d '=' -f2)
+[[ -n "$ctrl_ip" ]]
+node_admin_username=${NODE_ADMIN_USERNAME:-'heat-admin'}
+pcs_bootstrap_node=$(ssh $node_admin_username@$ctrl_ip "sudo hiera -c /etc/puppet/hiera.yaml pacemaker_short_bootstrap_node_name")
+ssh $node_admin_username@$pcs_bootstrap_node "sudo pcs property set stonith-enabled=false"
+
 #For nightly lab
 #tripleo-ansible-inventory --ansible_ssh_user stack -static-yaml-inventory ~/inventory.yaml
 tripleo-ansible-inventory --static-yaml-inventory ~/inventory.yaml
