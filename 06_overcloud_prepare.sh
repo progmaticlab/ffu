@@ -13,8 +13,9 @@ source stackrc
 ctrl_ip=$(openstack server list --name overcloud-controller-0 -c Networks -f value | cut -d '=' -f2)
 [[ -n "$ctrl_ip" ]]
 node_admin_username=${NODE_ADMIN_USERNAME:-'heat-admin'}
-pcs_bootstrap_node=$(ssh $node_admin_username@$ctrl_ip "sudo hiera -c /etc/puppet/hiera.yaml pacemaker_short_bootstrap_node_name")
-ssh $node_admin_username@$pcs_bootstrap_node "sudo pcs property set stonith-enabled=false"
+pcs_bootstrap_node_name=$(ssh $node_admin_username@$ctrl_ip "sudo hiera -c /etc/puppet/hiera.yaml pacemaker_short_bootstrap_node_name")
+pcs_bootstrap_node_ip=$(openstack server list --name $pcs_bootstrap_node_name -c Networks -f value | cut -d '=' -f2)
+ssh $node_admin_username@$pcs_bootstrap_node_ip "sudo pcs property set stonith-enabled=false"
 
 #For nightly lab
 #tripleo-ansible-inventory --ansible_ssh_user stack -static-yaml-inventory ~/inventory.yaml
