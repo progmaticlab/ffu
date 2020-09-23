@@ -32,6 +32,12 @@ $my_dir/update_nic_templates.sh
 
 role_file="$(pwd)/tripleo-heat-templates/roles_data_contrail_aio.yaml"
 
+# Remove ContrailControlOnly role otherwise TripleO includes tasks
+# from external_upgrade_tasks for this role that has empty tripleo_delegate_to
+# in test configuration and that leads to fail with error
+# "Fail if tripleo_delegate_to is undefined" for undercloud node
+sed -i '/ContrailControlOnly/,/ContrailDpdk/{//!d}' $role_file
+
 ./tripleo-heat-templates/tools/process-templates.py --clean \
   -r $role_file \
   -p tripleo-heat-templates/
