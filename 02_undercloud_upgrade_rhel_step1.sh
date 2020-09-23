@@ -33,10 +33,13 @@ echo 'openvswitch2.13' | sudo tee -a /etc/leapp/transaction/to_install
 echo 'ceph-ansible' | sudo tee -a /etc/leapp/transaction/to_keep
 
 sudo leapp upgrade --debug \
-  --enablerepo rhel-8-for-x86_64-baseos-eus-rpms \
-  --enablerepo rhel-8-for-x86_64-appstream-eus-rpms \
+  --enablerepo rhel-8-for-x86_64-baseos-rpms \
+  --enablerepo rhel-8-for-x86_64-appstream-rpms \
+  --enablerepo rhel-8-for-x86_64-highavailability-rpms \
   --enablerepo fast-datapath-for-rhel-8-x86_64-rpms \
-  --enablerepo ansible-2.9-for-rhel-8-x86_64-rpms
+  --enablerepo ansible-2-for-rhel-8-x86_64-rpms \
+  --enablerepo openstack-16.1-for-rhel-8-x86_64-rpms
+  --enablerepo satellite-tools-6.5-for-rhel-8-x86_64-rpms \
 
 sudo touch /.autorelabel
 
