@@ -24,5 +24,5 @@ cat undercloud.conf
 openstack undercloud upgrade -y
 
 echo undercloud tripleo upgrade finished. Checking status
-sudo systemctl list-units "tripleo_*"
+sudo systemctl list-units --no-pager "tripleo_*"
 sudo podman ps --all
