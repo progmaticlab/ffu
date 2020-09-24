@@ -2,7 +2,7 @@
 
 cd ~
 source stackrc
-source ~/rhosp-environment.sh
+source rhosp-environment.sh
 
 registry=${CONTAINER_REGISTRY:-'docker.io/tungstenfabric'}
 tag=${CONTRAIL_CONTAINER_TAG:-'latest'}

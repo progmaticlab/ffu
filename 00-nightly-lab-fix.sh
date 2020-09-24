@@ -1,6 +1,7 @@
 #!/bin/bash -eu
 
-source ~/rhosp-environment.sh
+cd ~
+source rhosp-environment.sh
 
 sudo subscription-manager unregister
 sudo subscription-manager register --username $RHEL_USER --password $RHEL_PASSWORD

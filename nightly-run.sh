@@ -21,7 +21,7 @@ function run_ssh() {
 }
 
 function run_ssh_undercloud() {
-  run_ssh $IPMI_USER $mgmt_ip $ssh_private_key "$@"
+  run_ssh $IPMI_USER $mgmt_ip $ssh_private_key "NODE_ADMIN_USERNAME=$SSH_USER $@"
 }
 
 function wait_ssh() {
@@ -96,7 +96,10 @@ run_ssh_undercloud './ffu/04_undercloud_upgrade_tripleo.sh'
 ######################################################
 #                  OVERCLOUD                         #
 ######################################################
-
-run_ssh_undercloud './ffu/05_contrail_images_prepare.sh'
 run_ssh_undercloud './ffu/06_overcloud_prepare.sh'
-run_ssh_undercloud "NODE_ADMIN_USERNAME=$SSH_USER ./ffu/07_overcloud_upgrade.sh"
+run_ssh_undercloud './ffu/07_overcloud_prepare_templates.sh'
+run_ssh_undercloud './ffu/08_overcloud_upgrade_prepare.sh'
+run_ssh_undercloud './ffu/09_overcloud_upgrade_os.sh'
+run_ssh_undercloud './ffu/10_overcloud_upgrade_contrail_ctrl.sh'
+run_ssh_undercloud './ffu/11_overcloud_upgrade_compute.sh'
+run_ssh_undercloud './ffu/12_overcloud_upgrade_converge.sh'

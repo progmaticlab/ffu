@@ -1,0 +1,13 @@
+#!/bin/bash -eux
+
+my_file="$(readlink -e "$0")"
+my_dir="$(dirname "$my_file")"
+
+cd ~
+source stackrc
+source rhosp-environment.sh
+
+for node in $(openstack server list --name overcloud-contrailcontroller -c Name -f value) ; do
+  openstack overcloud upgrade run --stack overcloud --tags system_upgrade --limit $node
+  openstack overcloud upgrade run --stack overcloud --limit $node
+done

@@ -1,5 +1,9 @@
 #!/bin/bash -eux
 
+cd ~
+source stackrc
+source rhosp-environment.sh
+
 sudo dnf -y remove python2*
 
 sudo subscription-manager release --set=8.2

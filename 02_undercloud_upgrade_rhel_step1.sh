@@ -3,6 +3,10 @@
 my_file="$(readlink -e "$0")"
 my_dir="$(dirname "$my_file")"
 
+cd ~
+source stackrc
+source rhosp-environment.sh
+
 /sbin/ip addr list
 
 sudo systemctl stop openstack-* httpd haproxy mariadb rabbitmq* docker xinetd || true

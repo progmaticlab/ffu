@@ -4,9 +4,10 @@ my_file="$(readlink -e "$0")"
 my_dir="$(dirname "$my_file")"
 
 cd ~
-sudo dnf install -y python3-tripleoclient
+source stackrc
+source rhosp-environment.sh
 
-source ~/rhosp-environment.sh
+sudo dnf install -y python3-tripleoclient
 
 echo Generating yaml files
 [[ -n "$RHEL_POOL_ID" && -n "$RHEL_USER" && -n "$RHEL_PASSWORD" ]]
@@ -20,7 +21,6 @@ sed -i "/\[DEFAULT\]/ a container_images_file = containers-prepare-parameter.yam
 sed -i "s/eth/em/" undercloud.conf
 cat undercloud.conf
 
-source stackrc
 openstack undercloud upgrade -y
 
 echo undercloud tripleo upgrade finished. Checking status
