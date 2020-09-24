@@ -18,6 +18,14 @@ function run_ssh() {
   echo ------------------------- Running on $user@$addr -----------------------------------
   echo ---  Command: $command
   ssh ${user}@${addr} ${command}
+  if [ $? -ne 0 ]
+  then
+     echo ===================== FAIL: ${command}
+     echo Exiting
+     exit 1
+  else
+     echo --------------------- Command ${command} finished successfull
+  fi
 }
 
 function run_ssh_undercloud() {
