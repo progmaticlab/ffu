@@ -29,7 +29,7 @@ function run_ssh() {
 }
 
 function run_ssh_undercloud() {
-  run_ssh $IPMI_USER $mgmt_ip $ssh_private_key "NODE_ADMIN_USERNAME=$SSH_USER $@"
+  run_ssh $SSH_USER $mgmt_ip $ssh_private_key "NODE_ADMIN_USERNAME=$SSH_USER $@"
 }
 
 function wait_ssh() {
@@ -59,7 +59,7 @@ function wait_ssh() {
 function reboot_and_wait_undercloud() {
   echo "Rebooting undercloud"
   run_ssh_undercloud 'sudo reboot'
-  wait_ssh $IPMI_USER $mgmt_ip $ssh_private_key
+  wait_ssh $SSH_USER $mgmt_ip $ssh_private_key
 }
 
 function checkForVariable() {
