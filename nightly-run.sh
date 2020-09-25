@@ -82,7 +82,7 @@ checkForVariable undercloud_admin_host
 cd
 
 echo "Copiyng ffu/* to undercloud node"
-scp -r $my_dir/ffu $SSH_USER@$mgmt_ip:./
+scp -r ./ffu $SSH_USER@$mgmt_ip:./
 scp -r nightly-env.sh $SSH_USER@$mgmt_ip:./rhosp-environment.sh
 
 echo Preparing for undercloud RHEL upgrade
