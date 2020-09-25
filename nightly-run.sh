@@ -6,6 +6,7 @@ my_dir="$(dirname "$my_file")"
 cd
 source nightly-env.sh
 
+
 function run_ssh() {
   local user=$1	
   local addr=$2
@@ -57,8 +58,12 @@ function wait_ssh() {
 }
 
 function reboot_and_wait_undercloud() {
+  local ssh_opts='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o PasswordAuthentication=no'
+  if [[ -n "$ssh_private_key" ]] ; then
+    ssh_opts+=" -i $ssh_private_key"
+  fi
   echo "Rebooting undercloud"
-  run_ssh_undercloud 'sudo reboot'
+  ssh ${SSH_USER}@${mgmt_ip} 'sudo reboot'
   wait_ssh $SSH_USER $mgmt_ip $ssh_private_key
 }
 
@@ -81,19 +86,19 @@ checkForVariable undercloud_admin_host
 
 cd
 
-echo "Copiyng ffu/* to undercloud node"
-scp -r ./ffu $SSH_USER@$mgmt_ip:./
-scp -r nightly-env.sh $SSH_USER@$mgmt_ip:./rhosp-environment.sh
-
-echo Preparing for undercloud RHEL upgrade
-
-run_ssh_undercloud 'ffu/00-nightly-lab-fix.sh'
-
-echo "Preparing for undercloud RHEL upgrade"
-run_ssh_undercloud './ffu/01_undercloud_prepare.sh'
-reboot_and_wait_undercloud
-
-run_ssh_undercloud './ffu/02_undercloud_upgrade_rhel_step1.sh'
+#echo "Copiyng ffu/* to undercloud node"
+#scp -r ./ffu $SSH_USER@$mgmt_ip:./
+#scp -r nightly-env.sh $SSH_USER@$mgmt_ip:./rhosp-environment.sh
+#
+#echo Preparing for undercloud RHEL upgrade
+#
+#run_ssh_undercloud 'ffu/00-nightly-lab-fix.sh'
+#
+#echo "Preparing for undercloud RHEL upgrade"
+#run_ssh_undercloud './ffu/01_undercloud_prepare.sh'
+#reboot_and_wait_undercloud
+#
+#run_ssh_undercloud './ffu/02_undercloud_upgrade_rhel_step1.sh'
 reboot_and_wait_undercloud
 
 run_ssh_undercloud './ffu/03_undercloud_upgrade_rhel_step2.sh'

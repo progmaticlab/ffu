@@ -57,8 +57,12 @@ function wait_ssh() {
 }
 
 function reboot_and_wait_undercloud() {
+  local ssh_opts='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o PasswordAuthentication=no'
+  if [[ -n "$ssh_private_key" ]] ; then
+    ssh_opts+=" -i $ssh_private_key"
+  fi
   echo "Rebooting undercloud"
-  run_ssh_undercloud 'sudo reboot'
+  ssh ${SSH_USER}@${mgmt_ip} 'sudo reboot'
   wait_ssh $SSH_USER $mgmt_ip $ssh_private_key
 }
 
