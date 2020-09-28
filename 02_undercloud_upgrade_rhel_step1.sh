@@ -42,8 +42,8 @@ sudo leapp upgrade --debug \
   --enablerepo rhel-8-for-x86_64-highavailability-rpms \
   --enablerepo fast-datapath-for-rhel-8-x86_64-rpms \
   --enablerepo ansible-2-for-rhel-8-x86_64-rpms \
-  --enablerepo openstack-16.1-for-rhel-8-x86_64-rpms
-  --enablerepo satellite-tools-6.5-for-rhel-8-x86_64-rpms \
+  --enablerepo openstack-16.1-for-rhel-8-x86_64-rpms \
+  --enablerepo satellite-tools-6.5-for-rhel-8-x86_64-rpms
 
 sudo touch /.autorelabel
 
