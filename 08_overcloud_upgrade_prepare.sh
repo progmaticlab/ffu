@@ -3,6 +3,9 @@
 my_file="$(readlink -e "$0")"
 my_dir="$(dirname "$my_file")"
 
+exec > ${0}.log 2>&1
+echo $(date) "------------------ STARTED: $0 -------------------"
+
 cd ~
 source stackrc
 source rhosp-environment.sh
@@ -34,3 +37,5 @@ openstack overcloud upgrade prepare \
   -e tripleo-heat-templates/workaround.yaml
 
 openstack overcloud external-upgrade run --stack overcloud --tags container_image_prepare
+
+echo $(date) "------------------ FINISHED: $0 ------------------"

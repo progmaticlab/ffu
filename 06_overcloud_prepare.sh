@@ -3,6 +3,9 @@
 my_file="$(readlink -e "$0")"
 my_dir="$(dirname "$my_file")"
 
+exec > ${0}.log 2>&1
+echo $(date) "------------------ STARTED: $0 -------------------"
+
 cd ~
 source stackrc
 
@@ -33,3 +36,5 @@ ansible-playbook  -i inventory.yaml -l overcloud --forks=1 $my_dir/playbook-over
 ansible overcloud -i inventory.yaml -m ping
 ansible overcloud_Controller -i inventory.yaml -b -m shell -a "pcs cluster start"
 ansible overcloud_Controller -i inventory.yaml -b -m shell -a "pcs status"
+
+echo $(date) "------------------ FINISHED: $0 ------------------"

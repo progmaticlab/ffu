@@ -3,6 +3,9 @@
 my_file="$(readlink -e "$0")"
 my_dir="$(dirname "$my_file")"
 
+exec > ${0}.log 2>&1
+echo $(date) "------------------ STARTED: $0 -------------------"
+
 cd ~
 source stackrc
 source rhosp-environment.sh
@@ -37,3 +40,5 @@ role_file="$(pwd)/tripleo-heat-templates/roles_data_contrail_aio.yaml"
 # in test configuration and that leads to fail with error
 # "Fail if tripleo_delegate_to is undefined" for undercloud node
 sed -i '/ContrailControlOnly/,/ContrailDpdk/{//!d}' $role_file
+
+echo $(date) "------------------ FINISHED: $0 ------------------"

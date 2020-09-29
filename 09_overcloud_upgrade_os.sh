@@ -3,6 +3,9 @@
 my_file="$(readlink -e "$0")"
 my_dir="$(dirname "$my_file")"
 
+exec > ${0}.log 2>&1
+echo $(date) "------------------ STARTED: $0 -------------------"
+
 cd ~
 source stackrc
 source rhosp-environment.sh
@@ -29,3 +32,5 @@ for node in $(openstack server list --name overcloud-controller -c Name -f value
   upgraded_controllers+=",$node"
   openstack overcloud upgrade run --stack overcloud --limit $upgraded_controllers
 done
+
+echo $(date) "------------------ FINISHED: $0 ------------------"

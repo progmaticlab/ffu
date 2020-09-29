@@ -1,5 +1,8 @@
 #!/bin/bash -eux
 
+exec > ${0}.log 2>&1
+echo $(date) "------------------ STARTED: $0 -------------------"
+
 cd ~
 source stackrc
 source rhosp-environment.sh
@@ -23,3 +26,4 @@ sudo dnf module enable -y container-tools:2.0
 sudo dnf distro-sync -y 
 
 echo "Perform reboot: sudo reboot"
+echo $(date) "------------------ FINISHED: $0 ------------------"

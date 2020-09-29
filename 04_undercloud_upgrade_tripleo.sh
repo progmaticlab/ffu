@@ -3,6 +3,9 @@
 my_file="$(readlink -e "$0")"
 my_dir="$(dirname "$my_file")"
 
+exec > ${0}.log 2>&1
+echo $(date) "------------------ STARTED: $0 -------------------"
+
 cd ~
 source stackrc
 source rhosp-environment.sh
@@ -26,3 +29,4 @@ openstack undercloud upgrade -y
 echo undercloud tripleo upgrade finished. Checking status
 sudo systemctl list-units --no-pager "tripleo_*"
 sudo podman ps --all
+echo $(date) "------------------ FINISHED: $0 ------------------"

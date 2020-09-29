@@ -3,6 +3,9 @@
 my_file="$(readlink -e "$0")"
 my_dir="$(dirname "$my_file")"
 
+exec > ${0}.log 2>&1
+echo $(date) "------------------ STARTED: $0 -------------------"
+
 cd ~
 source stackrc
 source rhosp-environment.sh
@@ -26,3 +29,5 @@ openstack overcloud upgrade converge \
   -e containers-prepare-parameter.yaml \
   -e tripleo-heat-templates/upgrades-environment.yaml \
   -e tripleo-heat-templates/workaround.yaml
+
+echo $(date) "------------------ FINISHED: $0 ------------------"

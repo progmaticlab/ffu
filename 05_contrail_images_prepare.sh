@@ -1,5 +1,8 @@
 #!/bin/bash -eux
 
+exec > ${0}.log 2>&1
+echo $(date) "------------------ STARTED: $0 -------------------"
+
 cd ~
 source stackrc
 source rhosp-environment.sh
@@ -20,3 +23,4 @@ sudo openstack overcloud container image upload --config-file ./contrail_contain
 echo Checking catalog in docker registry
 openstack tripleo container image list
 
+echo $(date) "------------------ FINISHED: $0 ------------------"
