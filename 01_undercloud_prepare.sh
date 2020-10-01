@@ -11,7 +11,7 @@ source stackrc
 source rhosp-environment.sh
 
 #Collect information about undercloud before upgrade
-mkdir before_upgrade.data
+[[ -d before_upgrade.data ]] || mkdir before_upgrade.data
 cd before_upgrade.data
 uname -a >undercloud_uname.output
 rpm -qa > undercloud_installed_packages.txt
