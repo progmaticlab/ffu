@@ -23,3 +23,9 @@
             regexp: "^BIND_INT=eth"
             replace: "BIND_INT={{ prefix }}"
           when: nic_result.stat.exists
+        - name: remove ifcfg-pktX ethX if any
+          shell: |
+            set -x
+            cd /etc/sysconfig/network-scripts/
+            rm -f ifcfg-pkt* ifcfg-eth*
+

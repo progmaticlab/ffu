@@ -24,6 +24,8 @@ ssh $node_admin_username@$pcs_bootstrap_node_ip "sudo pcs property set stonith-e
 #tripleo-ansible-inventory --ansible_ssh_user stack -static-yaml-inventory inventory.yaml
 tripleo-ansible-inventory --static-yaml-inventory inventory.yaml
 
+ansible-playbook -i inventory.yaml $my_dir/playbook-yum-update.yaml
+
 ansible-playbook -i inventory.yaml $my_dir/playbook-leapp-data.yaml
 ansible-playbook -i inventory.yaml $my_dir/playbook-nics.yaml
 ansible-playbook -i inventory.yaml $my_dir/playbook-nics-vlans.yaml
