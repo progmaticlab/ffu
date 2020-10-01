@@ -7,8 +7,12 @@ cd ~
 source stackrc
 source rhosp-environment.sh
 
-registry=${CONTAINER_REGISTRY:-'docker.io/tungstenfabric'}
-tag=${CONTRAIL_CONTAINER_TAG:-'latest'}
+registry=${CONTAINER_REGISTRY_FFU:-'docker.io/tungstenfabric'}
+tag=${CONTRAIL_CONTAINER_TAG_FFU:-'latest'}
+
+sed -i ./contrail-parameters.yaml -e "s/ContrailImageTag: .*$/ContrailImageTag: ${tag}/"
+
+cat ./contrail-parameters.yaml
 
 ./tripleo-heat-templates/tools/contrail/import_contrail_container.sh \
     -f ./contrail_containers.yaml -r $registry -t $tag
