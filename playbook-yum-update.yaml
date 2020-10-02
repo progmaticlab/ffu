@@ -10,7 +10,7 @@
     - name: run vrouter-init if exists
       shell: |
         set -x
-        if docker inspect contrail-vrouter-kernel-init >/dev/null 2>&1
+        if docker inspect contrail-vrouter-kernel-init >/dev/null 2>&1; then
           docker start -i contrail-vrouter-kernel-init
         fi
     - name: remove old eth udev rules if any after update
