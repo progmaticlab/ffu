@@ -10,6 +10,11 @@ source rhosp-environment.sh
 registry=${CONTAINER_REGISTRY_FFU:-'docker.io/tungstenfabric'}
 tag=${CONTRAIL_CONTAINER_TAG_FFU:-'latest'}
 
+export undercloud_registry_contrail=${prov_ip}:8787
+ns=$(echo ${registry} | cut -s -d '/' -f2-)
+[ -n "$ns" ] && undercloud_registry_contrail+="/$ns"
+
+sed -i ./contrail-parameters.yaml -e "s|ContrailRegistry: .*$|ContrailRegistry: ${undercloud_registry_contrail}|"
 sed -i ./contrail-parameters.yaml -e "s/ContrailImageTag: .*$/ContrailImageTag: ${tag}/"
 
 cat ./contrail-parameters.yaml
