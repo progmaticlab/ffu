@@ -110,3 +110,5 @@ run_ssh_undercloud './ffu/09_overcloud_upgrade_os.sh'
 run_ssh_undercloud './ffu/10_overcloud_upgrade_contrail_ctrl.sh'
 run_ssh_undercloud './ffu/11_overcloud_upgrade_compute.sh'
 run_ssh_undercloud './ffu/12_overcloud_upgrade_converge.sh'
+run_ssh_undercloud './ffu/13_collect_information.sh'
+
