@@ -60,6 +60,15 @@ function reboot_and_wait_undercloud() {
   wait_ssh $SSH_USER $mgmt_ip $ssh_private_key
 }
 
+function reboot_and_wait_overcloud_node() {
+  local user=${1:-'heat-admin'}
+  local ip=$2
+  local ssh_opts='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o PasswordAuthentication=no'
+  echo "Rebooting undercloud"
+  ssh ${user}@${ip} 'sudo reboot'
+  wait_ssh $user $ip
+}
+
 function checkForVariable() {
   local env_var=$(declare -p "$1")
   if !  [[ -v $1 && $env_var =~ ^declare\ -x ]]; then

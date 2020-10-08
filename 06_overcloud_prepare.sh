@@ -3,6 +3,8 @@
 my_file="$(readlink -e "$0")"
 my_dir="$(dirname "$my_file")"
 
+source $my_dir/functions.sh
+
 exec 3>&1 1> >(tee ${0}.log) 2>&1
 echo $(date) "------------------ STARTED: $0 -------------------"
 
@@ -25,7 +27,7 @@ ssh $node_admin_username@$pcs_bootstrap_node_ip "sudo pcs property set stonith-e
 tripleo-ansible-inventory --static-yaml-inventory inventory.yaml
 
 ansible overcloud -i inventory.yaml -b -m shell -a 'subscription-manager repos --enable=rhel-7-server-optional-rpms'
-ansible-playbook -i inventory.yaml -l overcloud $my_dir/playbook-yum-update.yaml
+ansible overcloud -i inventory.yaml -b -m shell -a 'yum update -y'
 
 ansible-playbook -i inventory.yaml $my_dir/playbook-leapp-data.yaml
 ansible-playbook -i inventory.yaml $my_dir/playbook-nics.yaml
@@ -33,9 +35,16 @@ ansible-playbook -i inventory.yaml $my_dir/playbook-nics-vlans.yaml
 ansible-playbook -i inventory.yaml -l overcloud_Compute $my_dir/playbook-nics-vhost0.yaml
 ansible-playbook -i inventory.yaml $my_dir/playbook-ssh.yaml
 
-echo "Rebooting overclouds"
 ansible overcloud_Controller -i inventory.yaml -b -m shell -a "pcs cluster stop"
-ansible-playbook  -i inventory.yaml -l overcloud --forks=1 $my_dir/playbook-overcloud_node_reboot.yaml
+
+echo "Rebooting overclouds"
+
+for ip in $(openstack server list -c Networks -f value | cut -d '=' -f2); do
+    echo Rebooting overcloud node $ip
+    reboot_and_wait_overcloud_node $ip 
+done
+
+#ansible-playbook  -i inventory.yaml -l overcloud --forks=1 $my_dir/playbook-overcloud_node_reboot.yaml
 ansible overcloud -i inventory.yaml -m ping
 ansible overcloud_Controller -i inventory.yaml -b -m shell -a "pcs cluster start"
 ansible overcloud_Controller -i inventory.yaml -b -m shell -a "pcs status"

@@ -28,4 +28,17 @@
             set -x
             cd /etc/sysconfig/network-scripts/
             rm -f ifcfg-pkt* ifcfg-eth*
+    - name: run vrouter-init if exists
+      shell: |
+        set -x
+        if docker inspect contrail-vrouter-kernel-init >/dev/null 2>&1; then
+          docker start -i contrail-vrouter-kernel-init
+        fi
+    - name: remove old eth udev rules if any after update
+      shell: |
+        set -x
+        rule_file=/etc/udev/rules.d/70-persistent-net.rules
+        if [[ -f $rule_file ]] && grep -q eth $rule_file ; then
+          rm -f $rule_file 
+        fi
 
