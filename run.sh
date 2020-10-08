@@ -29,7 +29,7 @@ function run_ssh() {
 }
 
 function run_ssh_undercloud() {
-  run_ssh $SSH_USER $mgmt_ip $ssh_private_key "NODE_ADMIN_USERNAME=$SSH_USER $@"
+  run_ssh $SSH_USER $mgmt_ip $ssh_private_key "$@"
 }
 
 function wait_ssh() {
