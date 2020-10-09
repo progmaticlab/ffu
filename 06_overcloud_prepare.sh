@@ -43,7 +43,10 @@ for ip in $(openstack server list -c Networks -f value | cut -d '=' -f2); do
     reboot_and_wait_overcloud_node $ip 
 done
 
-#ansible-playbook  -i inventory.yaml -l overcloud --forks=1 $my_dir/playbook-overcloud_node_reboot.yaml
+#Fix dns issue after yum update
+ansible overcloud -i ~/inventory.yaml -b -m shell -a 'echo "nameserver 8.8.8.8" >>/etc/resolv.conf'
+ansible overcloud -i ~/inventory.yaml -b -m shell -a 'echo "nameserver 8.8.4.4" >>/etc/resolv.conf'
+
 ansible overcloud -i inventory.yaml -m ping
 ansible overcloud_Controller -i inventory.yaml -b -m shell -a "pcs cluster start"
 ansible overcloud_Controller -i inventory.yaml -b -m shell -a "pcs status"
