@@ -31,7 +31,7 @@ sudo rm -rf /etc/httpd /var/lib/docker
 
 sudo yum install -y leapp
 
-sudo tar -xzf $my_dir/leapp-data8.tar.gz -C /etc/leapp/files
+sudo tar -xzf $my_dir/redhat_files/leapp-data8.tar.gz -C /etc/leapp/files
 
 sudo subscription-manager refresh
 

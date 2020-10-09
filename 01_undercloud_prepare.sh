@@ -30,9 +30,9 @@ for node in overcloud-controller-0 overcloud-contrailcontroller-0 overcloud-nova
 done    
 
 cd ~
-ansible-playbook -c local -i localhost, $my_dir/playbook-ssh.yaml
-ansible-playbook -c local -i localhost, $my_dir/playbook-nics.yaml
-ansible-playbook -c local -i localhost, $my_dir/playbook-nics-vlans.yaml
+ansible-playbook -c local -i localhost, $my_dir/redhat_files/playbook-ssh.yaml
+ansible-playbook -c local -i localhost, $my_dir/redhat_files/playbook-nics.yaml
+ansible-playbook -c local -i localhost, $my_dir/redhat_files/playbook-nics-vlans.yaml
 
 #Fix for 7.8. It must to be upgraded to 7.9 for leapp upgrade
 sudo yum update -y
