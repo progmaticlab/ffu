@@ -40,7 +40,6 @@ ansible overcloud_Controller -i inventory.yaml -b -m shell -a "pcs cluster stop"
 echo "Rebooting overclouds"
 
 for ip in $(openstack server list -c Networks -f value | cut -d '=' -f2); do
-    echo Rebooting overcloud node $ip
     reboot_and_wait_overcloud_node $ip 
 done
 

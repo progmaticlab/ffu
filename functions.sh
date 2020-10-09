@@ -56,16 +56,16 @@ function reboot_and_wait_undercloud() {
     ssh_opts+=" -i $ssh_private_key"
   fi
   echo "Rebooting undercloud"
-  ssh ${SSH_USER}@${mgmt_ip} 'sudo reboot'
+  ssh ${SSH_USER}@${mgmt_ip} 'sudo reboot' || true
   wait_ssh $SSH_USER $mgmt_ip $ssh_private_key
 }
 
 function reboot_and_wait_overcloud_node() {
-  local user=${1:-'heat-admin'}
-  local ip=$2
+  local ip=$1
+  local user=${2:-'heat-admin'}
   local ssh_opts='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o PasswordAuthentication=no'
-  echo "Rebooting undercloud"
-  ssh ${user}@${ip} 'sudo reboot'
+  echo "Rebooting overcloud node $ip"
+  ssh ${user}@${ip} 'sudo reboot' || true
   wait_ssh $user $ip
 }
 
