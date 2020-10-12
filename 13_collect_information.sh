@@ -16,7 +16,7 @@ cd after_upgrade.data
 uname -a >undercloud_uname.output
 rpm -qa > undercloud_installed_packages.txt
 cp /etc/os-release undercloud_os-release
-docker ps -a >undercloud_docker_ps.output
+podman ps -a >undercloud_podman_ps.output
 
 #Collect overcloud node information after upgrade
 node_admin_username=${NODE_ADMIN_USERNAME:-'heat-admin'}
@@ -26,7 +26,7 @@ for node in overcloud-controller-0 overcloud-contrailcontroller-0 overcloud-nova
     ssh $node_admin_username@$ip "uname -a" >${node}_uname.output
     ssh $node_admin_username@$ip "rpm -qa" >${node}_installed_packages.txt
     ssh $node_admin_username@$ip "cat /etc/os-release" >${node}_os-release
-    ssh $node_admin_username@$ip "sudo podmanr ps -a" >${node}_docker_ps.output
+    ssh $node_admin_username@$ip "sudo podman ps -a" >${node}_podman_ps.output
 done    
 
 echo $(date) "------------------ FINISHED: $0 ------------------"
