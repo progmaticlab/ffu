@@ -22,6 +22,7 @@ sed -i "/^\[DEFAULT\]/ a undercloud_public_host = ${undercloud_public_host}" und
 sed -i "/^\[DEFAULT\]/ a undercloud_admin_host = ${undercloud_admin_host}" undercloud.conf
 sed -i "/^\[DEFAULT\]/ a container_images_file = containers-prepare-parameter.yaml" undercloud.conf
 sed -i "s/eth/em/" undercloud.conf
+sed -i 's/#local_interface[ ]*=/local_interface =/g' undercloud.conf
 cat undercloud.conf
 
 openstack undercloud upgrade -y
