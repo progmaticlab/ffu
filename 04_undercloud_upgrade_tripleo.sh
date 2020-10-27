@@ -18,9 +18,9 @@ cat $my_dir/redhat_files/rhsm.yaml.template | envsubst > rhsm.yaml
 cat $my_dir/redhat_files/containers-prepare-parameter.yaml.template | envsubst > containers-prepare-parameter.yaml
 
 sed -i '/undercloud_public_host\|undercloud_admin_host\|container_images_file/d' undercloud.conf
-sed -i "/\[DEFAULT\]/ a undercloud_public_host = ${undercloud_public_host}" undercloud.conf
-sed -i "/\[DEFAULT\]/ a undercloud_admin_host = ${undercloud_admin_host}" undercloud.conf
-sed -i "/\[DEFAULT\]/ a container_images_file = containers-prepare-parameter.yaml" undercloud.conf
+sed -i "/^\[DEFAULT\]/ a undercloud_public_host = ${undercloud_public_host}" undercloud.conf
+sed -i "/^\[DEFAULT\]/ a undercloud_admin_host = ${undercloud_admin_host}" undercloud.conf
+sed -i "/^\[DEFAULT\]/ a container_images_file = containers-prepare-parameter.yaml" undercloud.conf
 sed -i "s/eth/em/" undercloud.conf
 cat undercloud.conf
 
