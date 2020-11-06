@@ -35,7 +35,7 @@ ansible-playbook -i inventory.yaml $my_dir/redhat_files/playbook-nics-vlans.yaml
 ansible-playbook -i inventory.yaml -l overcloud_Compute $my_dir/playbook-nics-vhost0.yaml
 ansible-playbook -i inventory.yaml $my_dir/redhat_files/playbook-ssh.yaml
 
-ansible overcloud_Controller -i inventory.yaml -b -m shell -a "pcs cluster stop"
+ansible overcloud_Controller -i inventory.yaml -b -m shell -a "pcs cluster stop --force"
 
 echo "Rebooting overclouds"
 

@@ -39,6 +39,8 @@ echo 'openvswitch2.11' | sudo tee -a /etc/leapp/transaction/to_remove
 echo 'openvswitch2.13' | sudo tee -a /etc/leapp/transaction/to_install
 echo 'ceph-ansible' | sudo tee -a /etc/leapp/transaction/to_keep
 
+sudo leapp answer --add --section remove_pam_pkcs11_module_check.confirm=True
+
 sudo leapp upgrade --debug \
   --enablerepo rhel-8-for-x86_64-baseos-rpms \
   --enablerepo rhel-8-for-x86_64-appstream-rpms \
