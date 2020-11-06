@@ -20,7 +20,7 @@ role_file="$(pwd)/tripleo-heat-templates/roles_data_contrail_aio.yaml"
   -r $role_file \
   -p tripleo-heat-templates/
 
-openstack overcloud upgrade prepare \
+openstack overcloud upgrade prepare -y \
   --templates tripleo-heat-templates/ \
   --stack overcloud --libvirt-type kvm \
   --roles-file $role_file \
@@ -36,6 +36,6 @@ openstack overcloud upgrade prepare \
   -e tripleo-heat-templates/upgrades-environment.yaml \
   -e tripleo-heat-templates/workaround.yaml
 
-openstack overcloud external-upgrade run --stack overcloud --tags container_image_prepare
+openstack overcloud external-upgrade run -y --stack overcloud --tags container_image_prepare
 
 echo $(date) "------------------ FINISHED: $0 ------------------"

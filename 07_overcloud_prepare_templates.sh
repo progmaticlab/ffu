@@ -25,10 +25,21 @@ cp $my_dir/redhat_files/workaround.yaml tripleo-heat-templates/
 
 container_node_name=$(sudo hiera container_image_prepare_node_names | sed 's/[]["]//g')
 container_node_ip=$(sudo hiera container_image_prepare_node_ips | sed 's/[]["]//g')
-cat <<EOF >> contrail-parameters.yaml
+cat <<EOF >> misc_opts.yaml
   DockerInsecureRegistryAddress:
     - ${container_node_name}:8787
     - ${container_node_ip}:8787
+EOF
+
+# overwrite file that was created by tf-devstack with options for rhosp13 
+cat <<EOF > contrail-parameters.yaml
+resource_registry:
+  # to enable root password for debugs via console (if no ssh available)
+  OS::TripleO::NodeUserData: tripleo-heat-templates/firstboot/userdata_root_password.yaml
+
+parameter_defaults:
+  # to allow to use vmdk images in tf-test
+  NovaSchedulerQueryImageType: false
 EOF
 
 $my_dir/redhat_files/update_nic_templates.sh
