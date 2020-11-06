@@ -17,7 +17,7 @@ node_admin_username=${NODE_ADMIN_USERNAME:-'heat-admin'}
 pcs_bootstrap_node=$(ssh $node_admin_username@$ctrl_ip "sudo hiera -c /etc/puppet/hiera.yaml pacemaker_short_bootstrap_node_name")
 [[ -n "$pcs_bootstrap_node" ]]
 
-openstack overcloud external-upgrade run --stack overcloud --tags ceph_systemd \
+openstack overcloud external-upgrade run -y --stack overcloud --tags ceph_systemd \
   -e ceph_ansible_limit=$pcs_bootstrap_node
 openstack overcloud upgrade run -y --stack overcloud --tags system_upgrade --limit $pcs_bootstrap_node
 openstack overcloud external-upgrade run -y --stack overcloud --tags system_upgrade_transfer_data
