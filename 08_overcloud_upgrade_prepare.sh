@@ -40,7 +40,7 @@ openstack overcloud upgrade prepare -y \
   -e tripleo-heat-templates/environments/contrail/contrail-services.yaml \
   -e tripleo-heat-templates/environments/contrail/contrail-net-single.yaml \
   -e tripleo-heat-templates/environments/contrail/contrail-plugins.yaml \
-  -e $tls_env_files \
+  $tls_env_files \
   -e misc_opts.yaml \
   -e contrail-parameters.yaml \
   -e containers-prepare-parameter.yaml \
